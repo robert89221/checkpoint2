@@ -1,4 +1,7 @@
 ﻿
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
+
 namespace CheckPoint2
 {
     internal sealed class ProductInventory
@@ -20,8 +23,23 @@ namespace CheckPoint2
 
         public IEnumerator<ProductItem> GetEnumerator()
         {
-            return Items.GetEnumerator();
+            foreach (var item in Items)    yield return item;
         }
+
+        public List<ProductItem> Search(string term)
+        {
+            var results = new List<ProductItem>();
+
+            var hasPrice = Int32.TryParse(term.Trim(), out int price);
+
+            foreach (var item in Items)
+            {
+                if (hasPrice ? item.Matches(price) : item.Matches(term))     results.Add(item);
+            }
+
+            return results;
+        }
+
     }
 
 }

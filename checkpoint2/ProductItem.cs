@@ -19,6 +19,16 @@ namespace CheckPoint2
             return Category + ", " + Name + ", " + Price + " kr";
         }
 
+        public bool Matches(int price)
+        {
+            return Price == price;
+        }
+
+        public bool Matches(string term)
+        {
+            return Category.ToLower().Contains(term.ToLower())  ||  Name.ToLower().Contains(term.ToLower());
+        }
+
         public static bool TryParse(string s, out ProductItem? prod)
         {
             prod = null;

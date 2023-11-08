@@ -1,5 +1,6 @@
 ﻿
 using CheckPoint2;
+using System.Diagnostics;
 
 var inventory = new ProductInventory();
 inventory.AddProductItem(new ProductItem("Mat", "Korv", 10));
@@ -87,6 +88,22 @@ void AddProducts()
 
 void SearchInventory()
 {
-    Console.WriteLine("(search)");
-}
+    if (inventory.Length == 0)
+    {
+        Console.WriteLine("Ditt inventarie är tomt");
 
+    } else
+    {
+        Console.Write("Sök på pris eller fritext, eller A för att avsluta: ");
+        var term = Console.ReadLine().Trim();
+
+        if (term.ToLower() == "a")
+        {
+            return;
+
+        } else {
+
+            foreach (var prod in inventory.Search(term))    Console.WriteLine(prod.PrettyPrint());
+        }
+    }
+}
