@@ -3,15 +3,20 @@ namespace CheckPoint2
 {
     internal sealed class ProductItem
     {
-        string category { get; }
-        string name { get; }
-        int price { get; }
+        string Category { get; }
+        string Name { get; }
+        int Price { get; }
 
-        ProductItem(string c, string n, int p)
+        public ProductItem(string c, string n, int p)
         {
-            category = c;
-            name = n;
-            price = p;
+            Category = c;
+            Name = n;
+            Price = p;
+        }
+
+        public string PrettyPrint()
+        {
+            return Category + ", " + Name + ", " + Price + " kr";
         }
 
         public static bool TryParse(string s, out ProductItem? prod)

@@ -2,6 +2,9 @@
 using CheckPoint2;
 
 var inventory = new ProductInventory();
+inventory.AddProductItem(new ProductItem("Mat", "Korv", 10));
+inventory.AddProductItem(new ProductItem("Elektronik", "Dator", 1200));
+inventory.AddProductItem(new ProductItem("Kläder", "Hatt", 350));
 
 
 //  huvudmenyn
@@ -9,23 +12,24 @@ var inventory = new ProductInventory();
 while (true)
 {
     Console.ForegroundColor = ConsoleColor.Gray;
-    Console.WriteLine("(V) View inventory   \n" +
-                      "(A) Add products     \n" +
-                      "(S) Search inventory \n" +
-                      "(Q) Quit             \n");
+    Console.WriteLine("----------------------- \n" +
+                      "(V) Visa inventarie     \n" +
+                      "(L) Lägg till produkter \n" +
+                      "(S) Sök i inventariet   \n" +
+                      "(A) Avsluta             \n");
 
     string choice;
     do
     {
-        Console.Write("Your choice: ");
+        Console.Write("Ditt val: ");
         choice = Console.ReadLine().Trim().ToLower();
 
-    } while (!"vasq".Contains(choice));
+    } while (!"vlsa".Contains(choice));
 
-    if (choice == "v") ViewInventory();
-    else if (choice == "a") AddProducts();
-    else if (choice == "s") SearchInventory();
-    else if (choice == "q") System.Environment.Exit(0);
+    if      (choice == "v")    ViewInventory();
+    else if (choice == "l")    AddProducts();
+    else if (choice == "s")    SearchInventory();
+    else if (choice == "a")    System.Environment.Exit(0);
 }
 
 
@@ -34,7 +38,15 @@ while (true)
 
 void ViewInventory()
 {
-    Console.WriteLine("(view inventory)");
+    if (inventory.Length > 0)
+    {
+        Console.WriteLine($"Dina {inventory.Length} produkter:");
+        foreach (var prod in inventory)     Console.WriteLine(prod.PrettyPrint());
+
+    } else {
+
+        Console.WriteLine("Ditt inventarie är tomt");
+    }
 }
 
 
