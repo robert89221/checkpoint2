@@ -1,7 +1,4 @@
 ﻿
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-
 namespace CheckPoint2
 {
     internal sealed class ProductInventory
@@ -18,6 +15,7 @@ namespace CheckPoint2
         public void AddProductItem(ProductItem p)
         {
             Items.Add(p);
+            Items.Sort();
             ++Length;
         }
 
@@ -26,7 +24,7 @@ namespace CheckPoint2
             foreach (var item in Items)    yield return item;
         }
 
-        public List<ProductItem> Search(string term)
+/*        public List<ProductItem> Search(string term)
         {
             var results = new List<ProductItem>();
 
@@ -39,7 +37,7 @@ namespace CheckPoint2
 
             return results;
         }
-
+*/
     }
 
 }

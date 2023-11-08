@@ -1,11 +1,11 @@
 ﻿
 namespace CheckPoint2
 {
-    internal sealed class ProductItem
+    internal sealed class ProductItem:IComparable
     {
-        string Category { get; }
-        string Name { get; }
-        int Price { get; }
+        public string Category { get; }
+        public string Name { get; }
+        public int Price { get; }
 
         public ProductItem(string c, string n, int p)
         {
@@ -14,21 +14,20 @@ namespace CheckPoint2
             Price = p;
         }
 
-        public string PrettyPrint()
-        {
-            return Category + ", " + Name + ", " + Price + " kr";
-        }
+        public int CompareTo(object? other)  =>  this.Price - (other as ProductItem).Price;
 
-        public bool Matches(int price)
-        {
-            return Price == price;
-        }
+        public string PrettyPrint()  =>  $"{Category,-15}{Name,-15}{Price,10} kr";
 
         public bool Matches(string term)
         {
-            return Category.ToLower().Contains(term.ToLower())  ||  Name.ToLower().Contains(term.ToLower());
-        }
+            term = term.Trim().ToLower();
 
+            bool priceMatches = false;
+            if (Int32.TryParse(term, out int p))    priceMatches = p == Price;
+
+            return Category.ToLower().Contains(term)  ||  Name.ToLower().Contains(term)  ||  priceMatches;
+        }
+    
         public static bool TryParse(string s, out ProductItem? prod)
         {
             prod = null;

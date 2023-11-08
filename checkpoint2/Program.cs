@@ -1,28 +1,30 @@
 ﻿
 using CheckPoint2;
-using System.Diagnostics;
+
+const ConsoleColor GRAY = ConsoleColor.Gray;
+const ConsoleColor DARK = ConsoleColor.DarkGray;
+const ConsoleColor RED = ConsoleColor.Red;
+const ConsoleColor GREEN = ConsoleColor.Green;
 
 var inventory = new ProductInventory();
-inventory.AddProductItem(new ProductItem("Mat", "Korv", 10));
+/*inventory.AddProductItem(new ProductItem("Mat", "Korv", 10));
 inventory.AddProductItem(new ProductItem("Elektronik", "Dator", 1200));
 inventory.AddProductItem(new ProductItem("Kläder", "Hatt", 350));
-
+*/
 
 //  huvudmenyn
 
 while (true)
 {
-    Console.ForegroundColor = ConsoleColor.Gray;
-    Console.WriteLine("----------------------- \n" +
-                      "(V) Visa inventarie     \n" +
-                      "(L) Lägg till produkter \n" +
-                      "(S) Sök i inventariet   \n" +
-                      "(A) Avsluta             \n");
+    PrintLine(GRAY, "(V) Visa inventarie     \n" +
+                    "(L) Lägg till produkter \n" +
+                    "(S) Sök i inventariet   \n" +
+                    "(A) Avsluta             \n");
 
     string choice;
     do
     {
-        Console.Write("Ditt val: ");
+        Print(GRAY, "Ditt val: ");
         choice = Console.ReadLine().Trim().ToLower();
 
     } while (!"vlsa".Contains(choice));
@@ -35,18 +37,38 @@ while (true)
 
 
 
+//  hjälpfunktioner
+
+void Print(ConsoleColor c, string s)
+{
+    Console.ForegroundColor = c;
+    Console.Write(s);
+}
+
+void PrintLine(ConsoleColor c, string s)  =>  Print(c, s + "\n");
+
+
+
 //  visa inventariet
 
 void ViewInventory()
 {
     if (inventory.Length > 0)
     {
-        Console.WriteLine($"Dina {inventory.Length} produkter:");
-        foreach (var prod in inventory)     Console.WriteLine(prod.PrettyPrint());
+        PrintLine(GRAY, $"\nDina {inventory.Length} produkter: \n");
+        int total = 0;
+
+        foreach (var prod in inventory)
+        {
+            PrintLine(GRAY, prod.PrettyPrint());
+            total += prod.Price;
+        }
+
+        PrintLine(GRAY, $"-------------------------------------------\nSumma {total,34} kr \n");
 
     } else {
 
-        Console.WriteLine("Ditt inventarie är tomt");
+        PrintLine(GRAY, "\nDitt inventarie är tomt \n");
     }
 }
 
@@ -56,15 +78,16 @@ void ViewInventory()
 
 void AddProducts()
 {
-    Console.WriteLine("Lägg till nya produkter i formatet \"kategori, namn, pris\", eller A för att avsluta");
+    PrintLine(GRAY, "\nLägg till nya produkter i formatet \"kategori, namn, pris\", A för att avsluta\n");
 
     while (true)
     {
-        Console.Write("Ny produkt: ");
+        Print(GRAY, "Ny produkt: ");
         var newProd = Console.ReadLine().Trim();
 
         if (newProd.ToLower() == "a")
         {
+            Console.WriteLine();
             return;
 
         } else {
@@ -72,11 +95,11 @@ void AddProducts()
             if (ProductItem.TryParse(newProd, out var prod))
             {
                 inventory.AddProductItem(prod);
-                Console.WriteLine("Produkten tillagd");
+                PrintLine(GRAY, "Produkten tillagd");
 
             } else {
 
-                Console.WriteLine("Ogiltigt produktformat");
+                PrintLine(RED, "Ogiltigt format");
             }
         }
     }
@@ -88,22 +111,40 @@ void AddProducts()
 
 void SearchInventory()
 {
-    if (inventory.Length == 0)
+    if (inventory.Length > 0)
     {
-        Console.WriteLine("Ditt inventarie är tomt");
+        Print(GRAY, "\nSök på pris eller fritext, A för att avsluta: ");
+        var term = Console.ReadLine().Trim().ToLower();
+        Console.WriteLine();
 
-    } else
-    {
-        Console.Write("Sök på pris eller fritext, eller A för att avsluta: ");
-        var term = Console.ReadLine().Trim();
-
-        if (term.ToLower() == "a")
+        if (term == "a")
         {
             return;
 
         } else {
 
-            foreach (var prod in inventory.Search(term))    Console.WriteLine(prod.PrettyPrint());
+            int total = 0;
+            foreach (var prod in inventory)
+            {
+                if (prod.Matches(term))
+                {
+                    total += prod.Price;
+                    PrintLine(GREEN, prod.PrettyPrint());
+
+                }
+                else {
+
+                    PrintLine(DARK, prod.PrettyPrint());
+                }
+
+            }
+
+            if (total > 0)    PrintLine(GRAY, $"-------------------------------------------\nSumma {total,34} kr \n");
+            else              PrintLine(DARK, "\nInga sökträffar \n");
         }
+ 
+    } else {
+
+        PrintLine(GRAY, "\nDitt inventarie är tomt \n");
     }
 }
