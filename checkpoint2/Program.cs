@@ -55,7 +55,30 @@ void ViewInventory()
 
 void AddProducts()
 {
-    Console.WriteLine("(add products)");
+    Console.WriteLine("Lägg till nya produkter i formatet \"kategori, namn, pris\", eller A för att avsluta");
+
+    while (true)
+    {
+        Console.Write("Ny produkt: ");
+        var newProd = Console.ReadLine().Trim();
+
+        if (newProd.ToLower() == "a")
+        {
+            return;
+
+        } else {
+
+            if (ProductItem.TryParse(newProd, out var prod))
+            {
+                inventory.AddProductItem(prod);
+                Console.WriteLine("Produkten tillagd");
+
+            } else {
+
+                Console.WriteLine("Ogiltigt produktformat");
+            }
+        }
+    }
 }
 
 
