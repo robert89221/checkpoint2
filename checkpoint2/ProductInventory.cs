@@ -1,6 +1,8 @@
 ﻿
 namespace CheckPoint2
 {
+    //  klass som wrappar List<ProductItem> för att representera inventariet
+
     internal sealed class ProductInventory
     {
         private List<ProductItem> Items { get; }
@@ -12,6 +14,8 @@ namespace CheckPoint2
             Length = 0;
         }
 
+        //  lägg till ny produkt, och håll listan sorterad
+
         public void AddProductItem(ProductItem p)
         {
             Items.Add(p);
@@ -19,25 +23,12 @@ namespace CheckPoint2
             ++Length;
         }
 
+        //  för att foreach ska fungera på inventariet
+
         public IEnumerator<ProductItem> GetEnumerator()
         {
             foreach (var item in Items)    yield return item;
         }
-
-/*        public List<ProductItem> Search(string term)
-        {
-            var results = new List<ProductItem>();
-
-            var hasPrice = Int32.TryParse(term.Trim(), out int price);
-
-            foreach (var item in Items)
-            {
-                if (hasPrice ? item.Matches(price) : item.Matches(term))     results.Add(item);
-            }
-
-            return results;
-        }
-*/
     }
 
 }

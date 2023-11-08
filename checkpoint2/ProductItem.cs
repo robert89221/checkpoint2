@@ -1,6 +1,8 @@
 ﻿
 namespace CheckPoint2
 {
+    //  klass för att representera en produkt
+
     internal sealed class ProductItem:IComparable
     {
         public string Category { get; }
@@ -14,9 +16,15 @@ namespace CheckPoint2
             Price = p;
         }
 
+        //  CompareTo för List.Sort()
+
         public int CompareTo(object? other)  =>  this.Price - (other as ProductItem).Price;
 
-        public string PrettyPrint()  =>  $"{Category,-15}{Name,-15}{Price,10} kr";
+        //  formattera produkten till en sträng på 40 tecken
+
+        public string PrettyPrint()  =>  $"{Category,-15}{Name,-15}{Price,7} kr";
+
+        //  jämför på kategori, namn, eller pris, och skilj ej på gemener eller versaler
 
         public bool Matches(string term)
         {
@@ -27,7 +35,9 @@ namespace CheckPoint2
 
             return Category.ToLower().Contains(term)  ||  Name.ToLower().Contains(term)  ||  priceMatches;
         }
-    
+ 
+        //  försök skapa ett produktobjekt från en sträng med formatet "string, string, int"
+
         public static bool TryParse(string s, out ProductItem? prod)
         {
             prod = null;

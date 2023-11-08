@@ -1,18 +1,16 @@
 ﻿
 using CheckPoint2;
 
+const ConsoleColor GREEN = ConsoleColor.Green;
 const ConsoleColor GRAY = ConsoleColor.Gray;
 const ConsoleColor DARK = ConsoleColor.DarkGray;
 const ConsoleColor RED = ConsoleColor.Red;
-const ConsoleColor GREEN = ConsoleColor.Green;
 
-var inventory = new ProductInventory();
-/*inventory.AddProductItem(new ProductItem("Mat", "Korv", 10));
-inventory.AddProductItem(new ProductItem("Elektronik", "Dator", 1200));
-inventory.AddProductItem(new ProductItem("Kläder", "Hatt", 350));
-*/
+
 
 //  huvudmenyn
+
+var inventory = new ProductInventory();
 
 while (true)
 {
@@ -20,6 +18,8 @@ while (true)
                     "(L) Lägg till produkter \n" +
                     "(S) Sök i inventariet   \n" +
                     "(A) Avsluta             \n");
+
+    //  loopa tills ett giltigt val matats in
 
     string choice;
     do
@@ -58,13 +58,15 @@ void ViewInventory()
         PrintLine(GRAY, $"\nDina {inventory.Length} produkter: \n");
         int total = 0;
 
+        //  loopa igenom inventariet och summera värdet
+
         foreach (var prod in inventory)
         {
             PrintLine(GRAY, prod.PrettyPrint());
             total += prod.Price;
         }
 
-        PrintLine(GRAY, $"-------------------------------------------\nSumma {total,34} kr \n");
+        PrintLine(GRAY, $"----------------------------------------\nSumma {total,31} kr \n");
 
     } else {
 
@@ -91,6 +93,8 @@ void AddProducts()
             return;
 
         } else {
+
+            //  verifiera formatet och lägg till ny produkt
 
             if (ProductItem.TryParse(newProd, out var prod))
             {
@@ -123,6 +127,8 @@ void SearchInventory()
 
         } else {
 
+            //  loopa igenom inventariet, summera endast sökträffarna
+
             int total = 0;
             foreach (var prod in inventory)
             {
@@ -131,15 +137,13 @@ void SearchInventory()
                     total += prod.Price;
                     PrintLine(GREEN, prod.PrettyPrint());
 
-                }
-                else {
+                } else {
 
                     PrintLine(DARK, prod.PrettyPrint());
                 }
-
             }
 
-            if (total > 0)    PrintLine(GRAY, $"-------------------------------------------\nSumma {total,34} kr \n");
+            if (total > 0)    PrintLine(GRAY, $"----------------------------------------\nSumma {total,31} kr \n");
             else              PrintLine(DARK, "\nInga sökträffar \n");
         }
  
