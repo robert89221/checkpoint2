@@ -1,9 +1,7 @@
 ﻿
 using CheckPoint2;
 
-const ConsoleColor GREEN = ConsoleColor.Green;
 const ConsoleColor GRAY = ConsoleColor.Gray;
-const ConsoleColor DARK = ConsoleColor.DarkGray;
 const ConsoleColor RED = ConsoleColor.Red;
 
 
@@ -60,10 +58,13 @@ void ViewInventory()
 
         //  loopa igenom inventariet och summera värdet
 
-        foreach (var prod in inventory)
+        var query = from ProductItem item in inventory
+                    select item;
+
+        foreach (var result in query)
         {
-            PrintLine(GRAY, prod.PrettyPrint());
-            total += prod.Price;
+            PrintLine(GRAY, result.PrettyPrint());
+            total += result.Price;
         }
 
         PrintLine(GRAY, $"----------------------------------------\nSumma {total,31} kr \n");
@@ -129,22 +130,19 @@ void SearchInventory()
 
             //  loopa igenom inventariet, summera endast sökträffarna
 
+            var query = from ProductItem item in inventory
+                        where item.Matches(term)
+                        select item;
+
             int total = 0;
-            foreach (var prod in inventory)
+            foreach (var result in query)
             {
-                if (prod.Matches(term))
-                {
-                    total += prod.Price;
-                    PrintLine(GREEN, prod.PrettyPrint());
-
-                } else {
-
-                    PrintLine(DARK, prod.PrettyPrint());
-                }
+               total += result.Price;
+               PrintLine(GRAY, result.PrettyPrint());
             }
 
             if (total > 0)    PrintLine(GRAY, $"----------------------------------------\nSumma {total,31} kr \n");
-            else              PrintLine(DARK, "\nInga sökträffar \n");
+            else              PrintLine(GRAY, "\nInga sökträffar \n");
         }
  
     } else {

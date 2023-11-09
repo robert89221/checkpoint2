@@ -1,9 +1,11 @@
 ﻿
+using System.Collections;
+
 namespace CheckPoint2
 {
     //  klass som wrappar List<ProductItem> för att representera inventariet
 
-    internal sealed class ProductInventory
+    internal sealed class ProductInventory:IEnumerable
     {
         private List<ProductItem> Items { get; }
         public int Length { get; private set; }
@@ -14,6 +16,10 @@ namespace CheckPoint2
             Length = 0;
         }
 
+        //  för att index-operatorn ska fungera på inventory
+
+        public ProductItem this[int index]  =>  Items[index];
+
         //  lägg till ny produkt, och håll listan sorterad
 
         public void AddProductItem(ProductItem p)
@@ -23,11 +29,38 @@ namespace CheckPoint2
             ++Length;
         }
 
-        //  för att foreach ska fungera på inventariet
+        //  implementation av IEnumerable för LINQ
 
-        public IEnumerator<ProductItem> GetEnumerator()
+        public IEnumerator GetEnumerator()
         {
-            foreach (var item in Items)    yield return item;
+            return new Enumerator(this);
+        }
+
+        //  klass som implementerar IEnumerator för internt bruk
+
+        private sealed class Enumerator:IEnumerator
+        {
+            private int index { get; set; }
+            private ProductInventory inventory { get; }
+
+            public object Current { get => inventory[index]; }
+
+            public Enumerator(ProductInventory inv)
+            {
+                index = -1;
+                inventory = inv;
+            }
+
+            public bool MoveNext()
+            {
+                ++index;
+                return index < inventory.Length;
+            }
+
+            public void Reset()
+            {
+                index = -1;
+            }
         }
     }
 
