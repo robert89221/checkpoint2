@@ -3,7 +3,7 @@ namespace CheckPoint2
 {
     //  klass för att representera en produkt
 
-    internal sealed class ProductItem:IComparable
+    internal sealed class ProductItem
     {
         public string Category { get; }
         public string Name { get; }
@@ -15,10 +15,6 @@ namespace CheckPoint2
             Name = n;
             Price = p;
         }
-
-        //  CompareTo för List.Sort()
-
-        public int CompareTo(object? other)  =>  this.Price - (other as ProductItem).Price;
 
         //  formattera produkten till en sträng på 40 tecken
 

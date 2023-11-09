@@ -20,12 +20,11 @@ namespace CheckPoint2
 
         public ProductItem this[int index]  =>  Items[index];
 
-        //  lägg till ny produkt, och håll listan sorterad
+        //  lägg till ny produkt
 
         public void AddProductItem(ProductItem p)
         {
             Items.Add(p);
-            Items.Sort();
             ++Length;
         }
 
@@ -43,7 +42,7 @@ namespace CheckPoint2
             private int index { get; set; }
             private ProductInventory inventory { get; }
 
-            public object Current { get => inventory[index]; }
+            public object Current { get  =>  inventory[index]; }
 
             public Enumerator(ProductInventory inv)
             {

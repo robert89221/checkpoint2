@@ -59,6 +59,7 @@ void ViewInventory()
         //  loopa igenom inventariet och summera värdet
 
         var query = from ProductItem item in inventory
+                    orderby item.Price
                     select item;
 
         foreach (var result in query)
@@ -132,6 +133,7 @@ void SearchInventory()
 
             var query = from ProductItem item in inventory
                         where item.Matches(term)
+                        orderby item.Price
                         select item;
 
             int total = 0;
