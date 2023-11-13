@@ -28,38 +28,11 @@ namespace CheckPoint2
             ++Length;
         }
 
-        //  implementation av IEnumerable för LINQ
+        //  implementation av IEnumerable för LINQ, returnerar enumeratorn i List
 
         public IEnumerator GetEnumerator()
         {
-            return new Enumerator(this);
-        }
-
-        //  klass som implementerar IEnumerator för internt bruk
-
-        private sealed class Enumerator:IEnumerator
-        {
-            private int index { get; set; }
-            private ProductInventory inventory { get; }
-
-            public object Current { get  =>  inventory[index]; }
-
-            public Enumerator(ProductInventory inv)
-            {
-                index = -1;
-                inventory = inv;
-            }
-
-            public bool MoveNext()
-            {
-                ++index;
-                return index < inventory.Length;
-            }
-
-            public void Reset()
-            {
-                index = -1;
-            }
+            return Items.GetEnumerator();
         }
     }
 
